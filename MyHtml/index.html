@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+</head>
+<body>
+    <!-- <img src="http://b-ssl.duitang.com/uploads/item/201703/01/20170301230203_CiWSj.jpeg"> -->
+    <video controls="" autoplay="" id="media"><source src="https://vdse.bdstatic.com//573d18eb6250c75562f4221e8a1c919b.mp4?authorization=bce-auth-v1/40f207e648424f47b2e3dfbb1014b1a5/2019-11-09T00:01:33Z/-1/host/f390c4527b8510141c90d8ffa4497531148ac39d8be3cabed6829642182ebd21" type="video/mp4"></video>
+    <div id='app'>
+    <ridinglantern width='180px' height='650px' num='3' bgimg='http://xxx.jpeg+https://xxx.jpg+https://xxx.png'></ridinglantern>
+    <!-- <div v-if="isShow=='Yes'">
+        Yes
+    </div>
+    <div v-else>
+        No
+    </div> -->
+    
+    ​</div>
+    <img id="img" src="">
+</body>
+<script>
+    let video=document.getElementById("media");
+    setTimeout(()=>{
+        console.log(video.controller);
+    },3000)
+</script>
+<script>
+// window.http = (url,send_data)=>{
+//     return new Promise((res,rel)=>{
+//         var xhr = new XMLHttpRequest;
+//         xhr.open('POST', url);
+//         // xhr.responseType = 'blob';
+//         // xhr.setRequestHeader('X-Requested-With', 'OpenAPIRequest');
+//         //xhr.setRequestHeader("Content-Type", "application/json");
+//         xhr.send(send_data);
+//         xhr.onreadystatechange = function () {
+//             if(xhr.readyState == 4 && xhr.status == 200) {
+//                 console.log(xhr.responseText);
+//                 // let dd=JSON.parse(xhr.responseText);
+//                 // console.log(dd);
+//                 res(xhr.responseText);
+//             }
+//         }
+//     });
+// }
+// http('http://192.168.31.24:8080/getQRcode',"1").then((res)=>{
+//     console.log("第一次响应",res);
+//     document.getElementById("img").src="data:image/png;base64,"+res;
+//     //res=JSON.parse(res);
+//     //console.log(res);
+//     //http('http://192.168.31.74:8080/change_password',JSON.stringify({oldpass:'aa12',newpass:'aa12',cookie:res.cookie}));
+//     //http('http://192.168.31.74:8080/getMyShangjia',JSON.stringify({cookie:res.cookie}));
+// });
+// http('http://192.168.31.74:8080/allshangjia',"12").then((res)=>{
+//     console.log("第二次响应",res);
+//     //res=JSON.parse(res);
+//     //console.log(res);
+//     //http('http://192.168.31.74:8080/change_password',JSON.stringify({oldpass:'aa12',newpass:'aa12',cookie:res.cookie}));
+//     //http('http://192.168.31.74:8080/getMyShangjia',JSON.stringify({cookie:res.cookie}));
+// });
+</script>
+<script> 
+// 注册
+Vue.component('ridinglantern', {
+    props:['width','height','num','bgimg'],
+    data:()=>{
+        return{
+            cla:{
+                position: 'absolute',
+                perspective: '1000px',
+                width: '650px',
+                height: '210px',
+                'transform-origin': 'center center 0px',
+                transform:'',
+                'background-color':'rgb(146,180,139)',
+                'background-image':'',
+                'background-size': 'cover'
+            },
+            cla1:{
+                'transform-style': 'preserve-3d',
+                '-webkit-transform-style': 'preserve-3d',
+                '-moz-transform-style': 'preserve-3d',
+                width: '650px',
+                height: '210px',
+                'margin-left': '300px',
+                'transition': '2s',
+                '-webkit-transition': '2s',
+                '-moz-transition': '2s',
+                transform: 'rotateY(0deg)'
+            },
+            cc:[],
+        }
+
+    },
+    methods: { 
+        translatez(n/*边数*/,width){            //计算中心点距离
+            n=parseInt(n);
+            width=parseInt(width);
+            let a=width / 2 / Math.tan(360 / n / 2 * 0.017453293);
+            return a.toFixed(2);
+        }
+    },
+    created: function () {
+        this.cla.width=this.width;
+        this.cla.height=this.height;
+        this.cla1.width=this.width;
+        this.cla1.height=this.height;
+        this.bgimg=this.bgimg.split("+");
+        for(let i=0;i<this.num;i++){
+            let a=JSON.stringify(this.cla);
+            this.cc.push(JSON.parse(a));
+            let translateZ=this.translatez(this.num,this.width);
+            let Y=(360/this.num*i);
+            this.cc[i].transform="rotateY("+Y+"deg)translateZ("+translateZ+"px)";
+            this.cc[i]['imgurl']=this.bgimg[i];
+            console.log(this.cc[i]);
+        }
+    },
+    beforeMount: function () {
+
+        var r=0;
+        setInterval(()=>{
+            r-=360/this.num;
+            this.cla1.transform='rotateY('+r+'deg)';
+        },2000); 
+        
+    },
+  
+    template:'<div v-bind:style=cla1>'+
+                '<div v-for="(n,index) in cc" v-bind:style=n> <img style="width: 100%;height: 100%;" :src="n.imgurl" alt=""> </div>'
+            +'</div>'
+})
+// 创建根实例
+new Vue({
+  el: '#app',
+  data:{
+    isShow:'No'
+  }
+})   
+</script>
+</html>
