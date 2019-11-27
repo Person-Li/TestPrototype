@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: dbservice
+  datasource:
+    username: root
+    password: Zhx666888
+    url: jdbc:mysql://39.98.179.133:3306/hm
+
+server:
+  port: 81
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1/eureka/

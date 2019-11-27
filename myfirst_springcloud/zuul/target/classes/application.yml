@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: zuul
+server:
+  port: 83
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1/eureka/
+zuul:
+  routes:
+    api-a:
+      path: /db/**
+      serviceId: dbservice
